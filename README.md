@@ -1,93 +1,119 @@
-#🌿 Pattern Hunter
-An offline-first AI companion for discovering patterns hidden in
-nature.
-Pattern Hunter turns a walk outdoors into a small exploration mission.
-It uses locally running AI models to suggest what to observe, analyze a
-photo of a natural object, and help you save discoveries in a personal
-Nature Journal.
-✨ Features
-AI-generated missions: Creative, beginner-friendly nature
-observation missions powered by Llama 3.2 1B.
-Photo pattern analysis: Upload a nature photo and ask Moondream
-to describe visible details and patterns.
-Nature Journal: Save observations and AI analysis in your
-browser.
-Local-first AI: After setup, AI inference runs locally through
-Ollama.
-Simple web interface: Built with HTML, CSS, and JavaScript.
-Image validation: JPG/JPEG, PNG, and WebP support; maximum
-upload size is 5 MB.
-> **Note:** AI descriptions are suggestions to support observation, not
-> scientific verification.
-🧰 Tech Stack
-Backend: Python, Flask
-Frontend: HTML, CSS, JavaScript
-Local AI runtime: Ollama
-Mission generation: `llama3.2:1b`
-Image understanding: `moondream`
-Journal storage: Browser `localStorage`
-🚀 Getting Started
-Prerequisites
-Python 3.10 or newer
-Ollama
-Git (optional)
-1. Clone the repository
-``` powershell
+# 🌿 Pattern Hunter
+
+**An offline-first AI companion for discovering patterns hidden in nature.**
+
+Pattern Hunter turns nature exploration into an interactive experience. It generates observation missions, analyzes photos of natural objects using local AI models, and helps users record their discoveries in a personal Nature Journal.
+
+## ✨ Features
+
+- 🤖 **AI-Generated Missions:** Generate creative nature observation missions using Llama 3.2 1B.
+- 📸 **AI Image Analysis:** Analyze photos of leaves, flowers, and other natural objects using Moondream.
+- 🌱 **Nature Journal:** Save AI analyses and personal observations in your browser.
+- 🔒 **Local-First AI:** Run AI models locally through Ollama instead of relying on hosted AI APIs.
+- 💻 **Simple Web Interface:** A lightweight interface built with HTML, CSS, and JavaScript.
+- 🖼️ **Image Validation:** Supports JPG, JPEG, PNG, and WebP images up to 5 MB.
+
+## 🛠️ Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| Python | Backend logic |
+| Flask | Web server and API routes |
+| HTML | Page structure |
+| CSS | Styling and layout |
+| JavaScript | Frontend interactions |
+| Ollama | Local AI model runtime |
+| Llama 3.2 1B | Nature mission generation |
+| Moondream | Image understanding |
+| Browser localStorage | Nature Journal persistence |
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+Before running Pattern Hunter, install:
+
+- [Python](https://www.python.org/downloads/)
+- [Ollama](https://ollama.com/download)
+- [Git](https://git-scm.com/downloads) (optional)
+
+### 1. Clone the Repository
+
+```bash
 git clone https://github.com/HarshrajNoob/pattern-hunter.git
 cd pattern-hunter
 ```
-You can also download the repository as a ZIP and extract it.
-2. Create and activate a virtual environment
+
+### 2. Create a Virtual Environment
+
 On Windows PowerShell:
-``` powershell
+
+```powershell
 py -m venv .venv
 .\.venv\Scripts\Activate.ps1
+```
+
+Install the required Python packages:
+
+```powershell
 python -m pip install flask requests
 ```
-If PowerShell blocks activation, run the environment's Python directly:
-``` powershell
-.\.venv\Scripts\python.exe -m pip install flask requests
-```
-3. Download the local AI models
-``` powershell
+
+### 3. Download the AI Models
+
+Make sure Ollama is installed, then run:
+
+```powershell
 ollama pull llama3.2:1b
 ollama pull moondream
 ```
-The initial downloads require internet access and may take a while. Keep
-Ollama installed and running when you use the app.
-4. Start Pattern Hunter
-With the virtual environment activated:
-``` powershell
+
+The first download requires an internet connection and may take some time.
+
+### 4. Run the Application
+
+Start the Flask application:
+
+```powershell
 python app.py
 ```
-Or, without activating it:
-``` powershell
-.\.venv\Scripts\python.exe app.py
+
+Open the local URL displayed in your terminal. It is usually:
+
+```text
+http://127.0.0.1:5000
 ```
-Open the local address printed by Flask---usually
-`http://127.0.0.1:5000`.
-🪴 How to Use It
-Open Pattern Hunter in your browser.
-Generate a nature mission.
-Find a natural object such as a leaf, flower, or tree.
-Choose a JPG/JPEG, PNG, or WebP image up to 5 MB.
-Upload it and review the AI's description of visible patterns.
-Save the analysis to your Nature Journal and add your own
-observation.
-Revisit your journal in the same browser.
-📴 Offline Behavior
-After Ollama and both models have been installed and downloaded, AI
-mission generation and image analysis can run locally without sending
-images to a hosted AI service.
-Internet is needed initially to install dependencies and download
-models.
-Ollama must be running for AI-powered features.
-The Nature Journal uses browser `localStorage`; entries are tied to
-that browser and device. Clearing browser data may remove them.
-If local AI mission generation fails, the app may use its built-in
-fallback missions.
-🗂️ Project Structure
-``` text
+
+Keep Ollama running while using the AI-powered features.
+
+## 🌳 How to Use Pattern Hunter
+
+1. Open Pattern Hunter in your browser.
+2. Generate a nature observation mission.
+3. Explore your surroundings and find an interesting natural object.
+4. Upload a photo in a supported image format.
+5. Let the local AI model analyze visible details and patterns.
+6. Save the analysis to your Nature Journal.
+7. Add your own observations and revisit them later.
+
+## 📴 Offline-First Design
+
+Pattern Hunter is designed to run AI inference locally.
+
+Once the dependencies and AI models have been downloaded:
+
+- Mission generation can use the local Llama model.
+- Image analysis can use the local Moondream model.
+- Images can be analyzed without sending them to a hosted AI service.
+- Journal entries remain stored in the browser's local storage.
+
+**Important:** Initial setup requires internet access to download dependencies and models. Ollama must be running for AI features to work. Journal entries are tied to the browser and device, and clearing browser data may remove them.
+
+If AI mission generation fails, the application can fall back to its built-in missions.
+
+## 📁 Project Structure
+
+```text
 pattern-hunter/
 ├── app.py
 ├── templates/
@@ -98,40 +124,63 @@ pattern-hunter/
 └── README.md
 ```
 
-🧪 Troubleshooting
-`ollama` is not recognized
-Make sure Ollama is installed. Restart PowerShell and check:
-``` powershell
+## 🔧 Troubleshooting
+
+### Ollama command is not recognized
+
+Check that Ollama is installed, reopen PowerShell, and run:
+
+```powershell
 ollama --version
 ```
-An AI feature does not respond
-Check that Ollama is running and both models are installed:
-``` powershell
+
+### AI features are not responding
+
+Check whether Ollama is running and the required models are available:
+
+```powershell
 ollama list
 ```
-If needed, run `ollama pull llama3.2:1b` or `ollama pull moondream`.
-Flask dependencies are missing
-``` powershell
+
+If a model is missing, download it using the commands in the setup section.
+
+### Python dependencies are missing
+
+Activate the virtual environment and run:
+
+```powershell
 python -m pip install flask requests
 ```
-Image analysis fails
-Check the image format and 5 MB limit, and confirm that `moondream` is
-installed and Ollama is running.
-🔒 Privacy
-Image analysis is designed to use the local Ollama service on your
-machine. The Nature Journal is stored in browser local storage. Avoid
-saving sensitive personal information on a shared device.
-🎯 Why Pattern Hunter?
-Nature is full of branching networks, symmetry, spirals, repetition, and
-geometry. Pattern Hunter encourages people to slow down, look closer,
-and use AI as a companion for curiosity---not a replacement for their
-own observation.
-🤝 Contributing
-Ideas, bug reports, and improvements are welcome. Open an issue or
-submit a pull request on GitHub.
-📄 License
-No license has been specified yet. Until a license is added, others
-should not assume they have permission to reuse, modify, or redistribute
-this project's code.
+
+### Image analysis fails
+
+- Confirm the image is JPG, JPEG, PNG, or WebP.
+- Make sure the image is no larger than 5 MB.
+- Confirm that the Moondream model is installed.
+- Check that Ollama is running.
+
+## 🔐 Privacy
+
+Pattern Hunter is designed to process images through the local Ollama service on your machine. Nature Journal entries are stored in browser local storage rather than a remote database.
+
+Avoid saving sensitive personal information, especially when using a shared device.
+
+## 💡 Why Pattern Hunter?
+
+Nature is full of fascinating patterns: branching networks in leaves, symmetry in flowers, spirals, repetition, and geometric structures.
+
+Pattern Hunter encourages people to slow down, observe their surroundings, and use AI as a companion for curiosity and discovery—not as a replacement for their own observations.
+
+## 🤝 Contributing
+
+Contributions, suggestions, and bug reports are welcome!
+
+You can open an issue or submit a pull request through the [GitHub repository](https://github.com/HarshrajNoob/pattern-hunter).
+
+## 📄 License
+
+No license has been specified yet. Until a license is added, others should not assume they have permission to reuse, modify, or redistribute this project's code.
+
 ---
-Built with curiosity 🌱
+
+**Built with curiosity. 🌱**
