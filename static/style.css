@@ -1,0 +1,308 @@
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #f4f5ed;
+.journal-card {
+    margin-top: 28px;
+    padding: 28px;
+    background: #ffffff;
+    border: 1px solid #e1e7db;
+    border-radius: 24px;
+}
+
+.journal-card label {
+    display: block;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.journal-card input,
+.journal-card textarea {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d5ddcf;
+    border-radius: 10px;
+    font: inherit;
+}
+
+.journal-card textarea {
+    resize: vertical;
+}
+
+.journal-card input:focus,
+.journal-card textarea:focus {
+    outline: 2px solid #57804c;
+    border-color: transparent;
+}
+
+.journal-card h3 {
+    margin-top: 28px;
+}
+
+.journal-entry {
+    margin-top: 12px;
+    padding: 16px;
+    background: #f4f5ed;
+    border-radius: 12px;
+    overflow-wrap: anywhere;
+}
+
+.journal-entry h4 {
+    margin: 0 0 8px;
+}
+
+.journal-entry p {
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.journal-entry small {
+    color: #647064;
+}
+
+.journal-entry button {
+    margin-top: 8px;
+}
+
+    color: #243629;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.app {
+    width: min(680px, 92%);
+    margin: 0 auto;
+    padding: 64px 0 32px;
+}
+
+header {
+    margin-bottom: 36px;
+}
+
+.eyebrow {
+    color: #647b5d;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+h1 {
+    margin: 12px 0;
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    letter-spacing: -2px;
+}
+
+h1 span {
+    color: #57804c;
+}
+
+.subtitle {
+    color: #647064;
+    line-height: 1.7;
+}
+
+.mission-card {
+    padding: 32px;
+    background: #ffffff;
+    border: 1px solid #e1e7db;
+    border-radius: 24px;
+    box-shadow: 0 16px 40px #2436290b;
+}
+
+h2 {
+    margin: 16px 0;
+    font-size: 1.8rem;
+}
+
+.tag {
+    display: inline-block;
+    padding: 7px 12px;
+    background: #e9f2e3;
+    color: #40683b;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+#description {
+    margin: 24px 0;
+    line-height: 1.8;
+}
+
+.question-box {
+    padding: 18px;
+    background: #f4f5ed;
+    border-radius: 14px;
+    line-height: 1.6;
+}
+
+.question-box p {
+    margin-bottom: 0;
+}
+
+button {
+    width: 100%;
+    margin-top: 24px;
+    padding: 16px;
+    border: none;
+    border-radius: 12px;
+    background: #315e3a;
+    color: white;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #24492c;
+}
+
+button:disabled {
+    opacity: 0.65;
+    cursor: wait;
+}
+
+#status {
+    min-height: 24px;
+    color: #647064;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+footer {
+    margin-top: 28px;
+    color: #647064;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+
+.journal-card {
+    margin-top: 28px;
+    padding: 28px;
+    background: #ffffff;
+    border: 1px solid #e1e7db;
+    border-radius: 24px;
+}
+
+.journal-card label {
+    display: block;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.journal-card input,
+.journal-card textarea {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d5ddcf;
+    border-radius: 10px;
+    font: inherit;
+}
+
+.journal-card textarea {
+    resize: vertical;
+}
+
+.journal-card input:focus,
+.journal-card textarea:focus {
+    outline: 2px solid #57804c;
+    border-color: transparent;
+}
+
+.journal-card h3 {
+    margin-top: 28px;
+}
+
+.journal-entry {
+    margin-top: 12px;
+    padding: 16px;
+    background: #f4f5ed;
+    border-radius: 12px;
+    overflow-wrap: anywhere;
+}
+
+.journal-entry h4 {
+    margin: 0 0 8px;
+}
+
+.journal-entry p {
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.journal-entry small {
+    color: #647064;
+}
+
+.journal-entry button {
+    margin-top: 8px;
+}
+
+
+.vision-section {
+    margin-top: 28px;
+    padding: 28px;
+    background: #ffffff;
+    border: 1px solid #e1e7db;
+    border-radius: 24px;
+}
+
+.vision-section input[type="file"] {
+    display: block;
+    width: 100%;
+    margin-top: 12px;
+    padding: 12px;
+    border: 1px solid #d5ddcf;
+    border-radius: 10px;
+}
+
+.vision-section button[hidden],
+.vision-section [hidden] {
+    display: none;
+}
+
+#vision-result {
+    margin-top: 20px;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+    line-height: 1.7;
+}
+
+#save-analysis {
+    background: #57804c;
+}
+
+
+.photo-preview {
+    margin-top: 16px;
+}
+
+#image-preview {
+    display: block;
+    width: 100%;
+    max-height: 320px;
+    object-fit: contain;
+    border-radius: 14px;
+    background: #f4f5ed;
+}
+
+.vision-section select {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    padding: 12px;
+    border: 1px solid #d5ddcf;
+    border-radius: 10px;
+    background: white;
+    color: #243629;
+    font: inherit;
+}

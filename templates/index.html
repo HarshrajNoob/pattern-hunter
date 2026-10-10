@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pattern Hunter | Explore the Outdoors</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <main class="app">
+        <header>
+            <p class="eyebrow">YOUR OUTDOOR DISCOVERY COMPANION</p>
+            <h1>Pattern<span>Hunter.</span></h1>
+            <p class="subtitle">
+                The world is full of patterns. Step outside and find them.
+            </p>
+        </header>
+
+        <section class="mission-card">
+            <p class="eyebrow">YOUR NEXT MISSION</p>
+            <h2 id="title">Ready to explore?</h2>
+            <span id="pattern" class="tag">Nature discovery</span>
+
+            <p id="description">
+                Generate your first mission to begin exploring.
+            </p>
+
+            <div class="question-box">
+                <strong>Think like a scientist</strong>
+                <p id="question">What patterns might be hiding around you?</p>
+            </div>
+
+            <button id="generate">Generate a mission →</button>
+            <button id="save-mission" type="button">
+                Record this mission in my journal ↓
+            </button>
+            <p id="status" role="status">Ready when you are.</p>
+        </section>
+
+
+        <section class="journal-card">
+            <p class="eyebrow">YOUR FIELD NOTES</p>
+            <h2>Nature Journal 📓</h2>
+            <p class="subtitle">
+                Record what you discovered on your outdoor adventure.
+            </p>
+
+            <form id="journal-form">
+                <label for="observation">What did you discover?</label>
+                <input id="observation" type="text" placeholder="Example: A leaf with symmetrical veins" required
+                    maxlength="200">
+
+                <label for="notes">Your observations</label>
+                <textarea id="notes" placeholder="What patterns did you notice?" rows="3" maxlength="1000"></textarea>
+
+                <button type="submit">Save discovery</button>
+            </form>
+
+            <p id="journal-status" role="status"></p>
+
+            <h3>My discoveries</h3>
+            <div id="journal-entries"></div>
+
+            <div class="vision-section">
+                <p class="eyebrow">AI VISION LAB</p>
+                <h2>Explore a Pattern 📷</h2>
+                <p>Upload a photo of a leaf, tree bark, flower, or another natural object.</p>
+
+                <form id="vision-form">
+                    <label for="nature-image">Choose a photo</label>
+                    <input type="file" id="nature-image" accept="image/png,image/jpeg,image/webp" required>
+
+
+                    <div class="photo-preview">
+                        <img id="image-preview" alt="Selected nature observation" hidden>
+                    </div>
+
+                    <label for="pattern-choice">What pattern do you think you found?</label>
+                    <select id="pattern-choice">
+                        <option value="Not sure yet">Not sure yet</option>
+                        <option value="Symmetry">Symmetry</option>
+                        <option value="Spiral">Spiral</option>
+                        <option value="Repetition">Repetition</option>
+                        <option value="Branching">Branching</option>
+                        <option value="Lines">Lines</option>
+                        <option value="Geometry">Geometry</option>
+                    </select>
+
+
+                    <button id="analyze-button" type="submit">
+                        Analyze with AI
+                    </button>
+                </form>
+
+                <p id="vision-status" role="status"></p>
+                <div id="vision-result" class="question-box" hidden></div>
+
+                <button id="save-analysis" type="button" hidden>
+                    Save analysis to Nature Journal
+                </button>
+            </div>
+        </section>
+
+
+        <footer>
+            <p>Less scrolling. More observing. 🌿</p>
+            <p>Currently using the local mission library.</p>
+        </footer>
+    </main>
+
+    <script>
+        const button = document.getElementById("generate");
+        const status = document.getElementById("status");
+        const saveMissionButton = document.getElementById("save-mission");
+        let currentMission = null;
+
+        button.addEventListener("click", async () => {
+            button.disabled = true;
+            status.textContent = "Finding your next mission...";
+
+            try {
+                saveMissionButton.disabled = true;
+                const response = await fetch("/api/mission");
+
+                if (!response.ok) {
+                    throw new Error("Mission request failed");
+                }
+
+                const mission = await response.json();
+                currentMission = mission;
+                saveMissionButton.disabled = false;
+
+                document.getElementById("title").textContent = mission.title;
+                document.getElementById("pattern").textContent = mission.pattern;
+                document.getElementById("description").textContent =
+                    mission.description;
+                document.getElementById("question").textContent =
+                    mission.question;
+
+                status.textContent = "Mission ready. Time to explore!";
+            } catch (error) {
+                status.textContent =
+                    "Couldn't load a mission. Please try again.";
+            } finally {
+                button.disabled = false;
+            }
+        });
+
+
+        const journalForm = document.getElementById("journal-form");
+        const observationInput = document.getElementById("observation");
+        const notesInput = document.getElementById("notes");
+        const journalEntries = document.getElementById("journal-entries");
+        const journalStatus = document.getElementById("journal-status");
+
+
+        saveMissionButton.addEventListener("click", () => {
+            if (!currentMission) {
+                document.getElementById("status").textContent =
+                    "Generate a mission first.";
+                return;
+            }
+
+            observationInput.value = currentMission.title;
+
+            notesInput.value =
+                `Pattern: ${currentMission.pattern}\n` +
+                `Mission: ${currentMission.description}\n\n` +
+                "My observation: ";
+
+            journalStatus.textContent =
+                "Mission added to your journal form. Record what you discovered!";
+
+            document.getElementById("journal-form").scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+
+            notesInput.focus();
+        });
+
+
+        const STORAGE_KEY = "pattern-hunter-journal";
+
+        function loadEntries() {
+            try {
+                const saved = JSON.parse(
+                    localStorage.getItem(STORAGE_KEY) || "[]"
+                );
+
+                return Array.isArray(saved) ? saved : [];
+            } catch {
+                return [];
+            }
+        }
+
+        let entries = loadEntries();
+
+        function renderEntries() {
+            journalEntries.replaceChildren();
+
+            if (entries.length === 0) {
+                const message = document.createElement("p");
+                message.textContent = "No discoveries saved yet. Go explore!";
+                journalEntries.appendChild(message);
+                return;
+            }
+
+            entries.forEach((entry) => {
+                const card = document.createElement("article");
+                card.className = "journal-entry";
+
+                const title = document.createElement("h4");
+                title.textContent = entry.observation;
+
+                const notes = document.createElement("p");
+                notes.textContent = entry.notes || "No extra notes added.";
+
+                const date = document.createElement("small");
+                date.textContent = new Date(entry.createdAt).toLocaleString();
+
+                const removeButton = document.createElement("button");
+                removeButton.type = "button";
+                removeButton.textContent = "Delete entry";
+                removeButton.addEventListener("click", () => {
+                    entries = entries.filter(item => item.id !== entry.id);
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+                    renderEntries();
+                    journalStatus.textContent = "Discovery deleted.";
+                });
+
+                card.append(title, notes, date, removeButton);
+                journalEntries.appendChild(card);
+            });
+        }
+
+        journalForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            const observation = observationInput.value.trim();
+            const notes = notesInput.value.trim();
+
+            if (!observation) {
+                journalStatus.textContent = "Enter your discovery first.";
+                return;
+            }
+
+            const entry = {
+                id: crypto.randomUUID(),
+                observation,
+                notes,
+                createdAt: new Date().toISOString()
+            };
+
+            entries.unshift(entry);
+
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+            } catch {
+                entries.shift();
+                journalStatus.textContent = "Could not save. Check browser storage.";
+                return;
+            }
+
+            journalForm.reset();
+            renderEntries();
+            journalStatus.textContent = "Discovery saved successfully!";
+        });
+
+        renderEntries();
+
+
+        const visionForm = document.getElementById("vision-form");
+        const imageInput = document.getElementById("nature-image");
+        const analyzeButton = document.getElementById("analyze-button");
+        const visionStatus = document.getElementById("vision-status");
+        const visionResult = document.getElementById("vision-result");
+        const saveAnalysisButton = document.getElementById("save-analysis");
+
+        let latestAnalysis = "";
+
+        visionForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const image = imageInput.files[0];
+
+            if (!image) {
+                visionStatus.textContent = "Please select a photo first.";
+                return;
+            }
+
+            if (image.size > 5 * 1024 * 1024) {
+                visionStatus.textContent = "Choose an image smaller than 5 MB.";
+                return;
+            }
+
+            analyzeButton.disabled = true;
+            saveAnalysisButton.hidden = true;
+            visionResult.hidden = true;
+            visionStatus.textContent = "AI is examining your photo...";
+
+            try {
+                const formData = new FormData();
+                formData.append("image", image);
+
+                const response = await fetch("/api/analyze-image", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.error || "Image analysis failed.");
+                }
+
+                latestAnalysis = result.analysis;
+                visionResult.textContent = latestAnalysis;
+                visionResult.hidden = false;
+                saveAnalysisButton.hidden = false;
+                visionStatus.textContent = "Analysis complete!";
+
+            } catch (error) {
+                visionStatus.textContent = error.message;
+            } finally {
+                analyzeButton.disabled = false;
+            }
+        });
+
+        saveAnalysisButton.addEventListener("click", () => {
+
+            saveAnalysisButton.addEventListener("click", () => {
+                if (!latestAnalysis) return;
+
+                observationInput.value = "Nature pattern observation";
+
+                notesInput.value =
+                    `My identified pattern: ${patternChoice.value}\n\n` +
+                    `AI analysis (unverified):\n${latestAnalysis}\n\n` +
+                    "My field notes: ";
+
+                journalStatus.textContent =
+                    "Review your observation and add your field notes.";
+
+                document.getElementById("journal-form").scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+
+                notesInput.focus();
+            });
+
+        });
+
+
+
+        const imagePreview = document.getElementById("image-preview");
+        const patternChoice = document.getElementById("pattern-choice");
+
+        let previewUrl = null;
+
+        imageInput.addEventListener("change", () => {
+            const file = imageInput.files[0];
+
+            if (previewUrl) {
+                URL.revokeObjectURL(previewUrl);
+                previewUrl = null;
+            }
+
+            imagePreview.removeAttribute("src");
+            imagePreview.hidden = true;
+
+            if (!file) return;
+
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp"
+            ];
+
+            if (!allowedTypes.includes(file.type)) {
+                visionStatus.textContent =
+                    "Choose a JPG, PNG, or WebP image.";
+                imageInput.value = "";
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                visionStatus.textContent =
+                    "Choose an image smaller than 5 MB.";
+                imageInput.value = "";
+                return;
+            }
+
+            previewUrl = URL.createObjectURL(file);
+            imagePreview.src = previewUrl;
+            imagePreview.hidden = false;
+            visionStatus.textContent = "Photo ready for analysis.";
+        });
+
+
+        imageInput.addEventListener("change", () => {
+            const image = imageInput.files[0];
+
+            if (previewUrl) {
+                URL.revokeObjectURL(previewUrl);
+                previewUrl = null;
+            }
+
+            imagePreview.hidden = true;
+
+            if (!image) return;
+
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp"
+            ];
+
+            if (!allowedTypes.includes(image.type)) {
+                visionStatus.textContent = "Choose a JPG, PNG, or WebP image.";
+                imageInput.value = "";
+                return;
+            }
+
+            if (image.size > 5 * 1024 * 1024) {
+                visionStatus.textContent = "Choose an image smaller than 5 MB.";
+                imageInput.value = "";
+                return;
+            }
+
+            previewUrl = URL.createObjectURL(image);
+            imagePreview.src = previewUrl;
+            imagePreview.hidden = false;
+            visionStatus.textContent = "Photo ready for analysis.";
+        });
+
+
+    </script>
+</body>
+
+</html>
